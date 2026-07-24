@@ -18,17 +18,34 @@ func cleanInput(text string) []string {
 }
 
 func commandExit() error {
-	// TODO: to be completed
+	fmt.Printf("Closing the Pokedex... Goodbye!\n")
+	os.Exit(0)
 	return nil
 }
 
+func commandHelp() error {
+	fmt.Printf("Welcome to the Pokedex!\nUsage:\n\n")
+	for _, command := range commands {
+		fmt.Printf("%v: %v\n", command.name, command.description)
+	}
+
+	return nil
+}
+
+var commands map[string]cliCommands
 
 func main() {
-	commands := map[string]cliCommands{
+	// TODO: before moving on, refactor and add eventual tests
+	commands = map[string]cliCommands{
 		"exit": {
 			name:        "exit",
 			description: "Exit the Pokedex",
 			callback:    commandExit,
+		},
+		"help": {
+			name:        "help",
+			description: "Displays a help message",
+			callback:    commandHelp,
 		},
 	}
 
@@ -38,8 +55,14 @@ func main() {
 		scanner.Scan()
 		input := scanner.Text()
 
-		word := cleanInput(input)[0]
-		fmt.Println("Your command was:", word)
+		command := cleanInput(input)[0]
+		c, ok := commands[command]
+
+		if !ok {
+			fmt.Printf("Unknown command\n")
+		} else {
+			c.callback()
+		}
 
 		if err := scanner.Err(); err != nil {
 			fmt.Fprintln(os.Stderr, "reading standard input:", err)
