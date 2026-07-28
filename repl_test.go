@@ -28,6 +28,7 @@ func TestCleanInput(t *testing.T) {
 			t.Errorf("lengths are different")
 			continue
 		}
+
 		for i := range actual {
 			word := actual[i]
 			expectedWord := c.expected[i]

@@ -1,9 +1,6 @@
 package main
 
 import (
-	"bufio"
-	"fmt"
-	"os"
 	"strings"
 )
 
@@ -15,21 +12,6 @@ type cliCommands struct {
 
 func cleanInput(text string) []string {
 	return strings.Fields(strings.ToLower(text))
-}
-
-func commandExit() error {
-	fmt.Printf("Closing the Pokedex... Goodbye!\n")
-	os.Exit(0)
-	return nil
-}
-
-func commandHelp() error {
-	fmt.Printf("Welcome to the Pokedex!\nUsage:\n\n")
-	for _, command := range commands {
-		fmt.Printf("%v: %v\n", command.name, command.description)
-	}
-
-	return nil
 }
 
 var commands map[string]cliCommands
@@ -49,23 +31,6 @@ func main() {
 		},
 	}
 
-	scanner := bufio.NewScanner(os.Stdin)
-	for {
-		fmt.Printf("Pokedex > ")
-		scanner.Scan()
-		input := scanner.Text()
+	startRepl()
 
-		command := cleanInput(input)[0]
-		c, ok := commands[command]
-
-		if !ok {
-			fmt.Printf("Unknown command\n")
-		} else {
-			c.callback()
-		}
-
-		if err := scanner.Err(); err != nil {
-			fmt.Fprintln(os.Stderr, "reading standard input:", err)
-		}
-	}
 }
