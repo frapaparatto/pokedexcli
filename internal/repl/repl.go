@@ -1,12 +1,18 @@
-package main
+package repl
 
 import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 )
 
-func startRepl() {
+func cleanInput(text string) []string {
+	return strings.Fields(strings.ToLower(text))
+}
+
+// Start runs the REPL loop, reading commands from stdin until the process exits.
+func Start(conf *Config) {
 	scanner := bufio.NewScanner(os.Stdin)
 	for {
 		fmt.Printf("Pokedex > ")
@@ -24,12 +30,12 @@ func startRepl() {
 		}
 
 		command := cleaned[0]
-		c, ok := commands[command]
+		c, ok := conf.commands[command]
 
 		if !ok {
 			fmt.Printf("Unknown command\n")
 		} else {
-			c.callback()
+			c.callback(conf)
 		}
 	}
 }
