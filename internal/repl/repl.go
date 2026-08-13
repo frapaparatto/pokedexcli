@@ -30,12 +30,18 @@ func Start(conf *Config) {
 		}
 
 		command := cleaned[0]
+		var options []string
+
+		if len(cleaned) > 1 {
+			options = cleaned[1:]
+		}
+
 		c, ok := conf.commands[command]
 
 		if !ok {
 			fmt.Printf("Unknown command\n")
-		} else {
-			c.callback(conf)
+		} else if err := c.callback(conf, options...); err != nil {
+			fmt.Printf("Error: %v\n", err)
 		}
 	}
 }

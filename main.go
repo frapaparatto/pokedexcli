@@ -3,14 +3,12 @@ package main
 import (
 	"time"
 
-	"github.com/frapaparatto/pokedexcli/internal/pokecache"
+	"github.com/frapaparatto/pokedexcli/internal/pokeapi"
 	"github.com/frapaparatto/pokedexcli/internal/repl"
 )
 
 func main() {
-	cache := pokecache.NewCache(5 * time.Millisecond)
-
-	conf := repl.NewConfig()
-	conf.Next = "https://pokeapi.co/api/v2/location-area/"
+	pokeClient := pokeapi.NewClient(5*time.Second, 5*time.Minute)
+	conf := repl.NewConfig(pokeClient)
 	repl.Start(conf)
 }
