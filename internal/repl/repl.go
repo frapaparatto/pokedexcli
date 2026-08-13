@@ -39,7 +39,7 @@ func Start(conf *Config) {
 		c, ok := conf.commands[command]
 
 		if !ok {
-			fmt.Printf("Unknown command\n")
+			fmt.Printf("Unknown command: %q. Run 'help' to see available commands.\n", command)
 		} else if err := c.callback(conf, options...); err != nil {
 			fmt.Printf("Error: %v\n", err)
 		}

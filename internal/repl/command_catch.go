@@ -32,8 +32,8 @@ func commandCatch(conf *Config, options ...string) error {
 		return err
 	}
 
-	catched := attemptCatch(pokemonResp.BaseExperience)
-	if !catched {
+	caught := attemptCatch(pokemonResp.BaseExperience)
+	if !caught {
 		fmt.Printf("%s escaped!\n", pokemonResp.Name)
 	} else {
 		fmt.Printf("%s was caught!\n", pokemonResp.Name)
