@@ -6,10 +6,7 @@ ones you've caught.
 
 ## Learning Context
 
-This is a project for familiarising myself with Go, built while working
-through boot.dev's
-[Build a Pokedex CLI in Go](https://www.boot.dev/courses/build-pokedex-cli-golang)
-course. The goal was learning the language: `struct`s and methods, pointer
+The goal was learning the language: `struct`s and methods, pointer
 vs. value receivers, `interface`s (or, in one place, the lack of one — see
 [Known Limitations](#known-limitations)), goroutines and `sync.Mutex`,
 package layout, and table-driven tests. It is not written to the same
@@ -107,6 +104,12 @@ Or build a binary first:
 ```bash
 go build -o pokedexcli .
 ./pokedexcli
+```
+
+There's also a `Makefile` that chains `test` → `fmt` → `vet` → `build` (requires `make`):
+
+```bash
+make
 ```
 
 ### Example session
