@@ -9,7 +9,7 @@ import (
 
 // Client wraps an HTTP client and a response cache for talking to the PokeAPI.
 type Client struct {
-	cache      pokecache.Cache
+	cache      *pokecache.Cache
 	httpClient http.Client
 }
 

@@ -6,8 +6,8 @@ import (
 )
 
 type Cache struct {
+	mu    sync.Mutex
 	cache map[string]cacheEntry
-	mux   *sync.Mutex
 }
 
 type cacheEntry struct {
@@ -16,8 +16,8 @@ type cacheEntry struct {
 }
 
 func (c *Cache) Add(key string, val []byte) {
-	c.mux.Lock()
-	defer c.mux.Unlock()
+	c.mu.Lock()
+	defer c.mu.Unlock()
 
 	c.cache[key] = cacheEntry{
 		createdAt: time.Now().UTC(),
@@ -26,16 +26,17 @@ func (c *Cache) Add(key string, val []byte) {
 }
 
 func (c *Cache) Get(key string) ([]byte, bool) {
-	c.mux.Lock()
-	defer c.mux.Unlock()
+	c.mu.Lock()
+	defer c.mu.Unlock()
 	entry, ok := c.cache[key]
 	return entry.val, ok
 }
 
-func NewCache(interval time.Duration) Cache {
-	c := Cache{
+// NewCache creates a Cache that periodically reaps entries older than
+// interval. The returned Cache must not be copied.
+func NewCache(interval time.Duration) *Cache {
+	c := &Cache{
 		cache: make(map[string]cacheEntry),
-		mux:   &sync.Mutex{},
 	}
 
 	go c.reapLoop(interval)
@@ -50,8 +51,8 @@ func (c *Cache) reapLoop(interval time.Duration) {
 }
 
 func (c *Cache) reap(now time.Time, last time.Duration) {
-	c.mux.Lock()
-	defer c.mux.Unlock()
+	c.mu.Lock()
+	defer c.mu.Unlock()
 	for k, v := range c.cache {
 		if v.createdAt.Before(now.Add(-last)) {
 			delete(c.cache, k)
