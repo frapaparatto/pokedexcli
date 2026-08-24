@@ -3,7 +3,6 @@ package repl
 import (
 	"testing"
 
-	"github.com/frapaparatto/pokedexcli/internal/pokeapi"
 	"github.com/frapaparatto/pokedexcli/internal/pokedex"
 )
 
@@ -17,8 +16,8 @@ func TestCommandPokedexEmpty(t *testing.T) {
 
 func TestCommandPokedexWithCaughtPokemon(t *testing.T) {
 	conf := &Config{pokedex: pokedex.NewPokedex()}
-	conf.pokedex.Add(pokeapi.RespPokemon{Name: "pidgey"})
-	conf.pokedex.Add(pokeapi.RespPokemon{Name: "pikachu"})
+	conf.pokedex.Add(pokedex.Pokemon{Name: "pidgey"})
+	conf.pokedex.Add(pokedex.Pokemon{Name: "pikachu"})
 
 	if err := commandPokedex(conf); err != nil {
 		t.Fatalf("unexpected error: %v", err)

@@ -7,10 +7,7 @@ import (
 
 // commandPokedex prints the names of every Pokemon the user has caught so far.
 func commandPokedex(conf *Config, options ...string) error {
-	names := make([]string, 0, len(conf.pokedex.Pokemons))
-	for name := range conf.pokedex.Pokemons {
-		names = append(names, name)
-	}
+	names := conf.pokedex.Names()
 	sort.Strings(names)
 
 	fmt.Println("Pokedex:")

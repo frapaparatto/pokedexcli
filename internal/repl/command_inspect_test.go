@@ -3,7 +3,6 @@ package repl
 import (
 	"testing"
 
-	"github.com/frapaparatto/pokedexcli/internal/pokeapi"
 	"github.com/frapaparatto/pokedexcli/internal/pokedex"
 )
 
@@ -26,7 +25,7 @@ func TestCommandInspectNoArgs(t *testing.T) {
 
 func TestCommandInspectCaught(t *testing.T) {
 	conf := &Config{pokedex: pokedex.NewPokedex()}
-	conf.pokedex.Add(pokeapi.RespPokemon{
+	conf.pokedex.Add(pokedex.Pokemon{
 		Name:   "pidgey",
 		Height: 3,
 		Weight: 18,

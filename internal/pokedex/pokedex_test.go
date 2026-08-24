@@ -1,30 +1,26 @@
 package pokedex
 
-import (
-	"testing"
-
-	"github.com/frapaparatto/pokedexcli/internal/pokeapi"
-)
+import "testing"
 
 func TestNewPokedexIsEmpty(t *testing.T) {
 	p := NewPokedex()
 
-	if p.Pokemons == nil {
-		t.Fatalf("expected Pokemons map to be initialized, got nil")
+	if p.pokemons == nil {
+		t.Fatalf("expected pokemons map to be initialized, got nil")
 	}
 
-	if len(p.Pokemons) != 0 {
-		t.Errorf("expected a new pokedex to be empty, got %d entries", len(p.Pokemons))
+	if len(p.Names()) != 0 {
+		t.Errorf("expected a new pokedex to be empty, got %d entries", len(p.Names()))
 	}
 }
 
 func TestPokedexAdd(t *testing.T) {
 	p := NewPokedex()
-	pikachu := pokeapi.RespPokemon{Name: "pikachu"}
+	pikachu := Pokemon{Name: "pikachu"}
 
 	p.Add(pikachu)
 
-	got, ok := p.Pokemons["pikachu"]
+	got, ok := p.Get("pikachu")
 	if !ok {
 		t.Fatalf("expected pikachu to be in the pokedex after Add")
 	}
@@ -33,21 +29,30 @@ func TestPokedexAdd(t *testing.T) {
 		t.Errorf("got %v, expected %v", got.Name, "pikachu")
 	}
 
-	if len(p.Pokemons) != 1 {
-		t.Errorf("got %d entries, expected 1", len(p.Pokemons))
+	if len(p.Names()) != 1 {
+		t.Errorf("got %d entries, expected 1", len(p.Names()))
 	}
 }
 
 func TestPokedexAddOverwritesExisting(t *testing.T) {
 	p := NewPokedex()
-	p.Add(pokeapi.RespPokemon{Name: "pikachu", BaseExperience: 1})
-	p.Add(pokeapi.RespPokemon{Name: "pikachu", BaseExperience: 2})
+	p.Add(Pokemon{Name: "pikachu", BaseExperience: 1})
+	p.Add(Pokemon{Name: "pikachu", BaseExperience: 2})
 
-	if len(p.Pokemons) != 1 {
-		t.Fatalf("got %d entries, expected 1 (re-catch should overwrite)", len(p.Pokemons))
+	if len(p.Names()) != 1 {
+		t.Fatalf("got %d entries, expected 1 (re-catch should overwrite)", len(p.Names()))
 	}
 
-	if p.Pokemons["pikachu"].BaseExperience != 2 {
-		t.Errorf("got BaseExperience %d, expected 2", p.Pokemons["pikachu"].BaseExperience)
+	got, _ := p.Get("pikachu")
+	if got.BaseExperience != 2 {
+		t.Errorf("got BaseExperience %d, expected 2", got.BaseExperience)
+	}
+}
+
+func TestPokedexGetNotFound(t *testing.T) {
+	p := NewPokedex()
+
+	if _, ok := p.Get("pikachu"); ok {
+		t.Errorf("expected ok=false for a pokemon that was never caught")
 	}
 }
