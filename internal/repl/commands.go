@@ -8,7 +8,7 @@ import (
 // Config holds shared REPL state, including the registered commands.
 type Config struct {
 	commands         map[string]cliCommand
-	pokeapiClient    pokeapi.Client
+	pokeapiClient    *pokeapi.Client
 	pokedex          *pokedex.Pokedex
 	nextLocationsURL *string
 	prevLocationsURL *string
@@ -21,7 +21,7 @@ type cliCommand struct {
 }
 
 // NewConfig builds a Config with all CLI commands registered.
-func NewConfig(client pokeapi.Client) *Config {
+func NewConfig(client *pokeapi.Client) *Config {
 	return &Config{
 		commands:      getCommands(),
 		pokeapiClient: client,
