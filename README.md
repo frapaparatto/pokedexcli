@@ -1,4 +1,4 @@
-# go-pokedex
+# pokedexcli
 
 A command-line Pokédex: a REPL that talks to [PokeAPI](https://pokeapi.co/)
 to explore locations, encounter Pokémon, try to catch them, and inspect the
